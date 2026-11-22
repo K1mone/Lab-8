@@ -1,0 +1,72 @@
+### All events
+GET http://localhost:8080/api/events
+
+### One event
+GET http://localhost:8080/api/events/1
+
+### Missing event -> 404
+GET http://localhost:8080/api/events/999
+
+### Search by title (ignoring case)
+GET http://localhost:8080/api/events?title=quiz
+
+### Search with no matches -> []
+GET http://localhost:8080/api/events?title=football
+
+### Optional: title + location filters
+GET http://localhost:8080/api/events?title=workshop&location=room
+
+### Create -> 201, note the returned id (here assumed 4)
+POST http://localhost:8080/api/events
+Content-Type: application/json
+
+{
+  "title": "Spring Data Workshop",
+  "location": "IITU, Room 101"
+}
+
+### Update id 4 -> 200, id stays the same
+PUT http://localhost:8080/api/events/4
+Content-Type: application/json
+
+{
+  "title": "Spring Data JPA Workshop",
+  "location": "IITU, Main Hall"
+}
+
+### Check the update
+GET http://localhost:8080/api/events/4
+
+### Delete id 4 -> 204 (repeat -> 404)
+DELETE http://localhost:8080/api/events/4
+
+### Update a missing id -> 404
+PUT http://localhost:8080/api/events/999
+Content-Type: application/json
+
+{
+  "title": "Any",
+  "location": "Any"
+}
+
+### Delete a missing id -> 404
+DELETE http://localhost:8080/api/events/999
+
+### Empty title -> 400, no row is created
+POST http://localhost:8080/api/events
+Content-Type: application/json
+
+{
+  "title": "",
+  "location": "Room 101"
+}
+
+### Client-provided id is ignored -> 201 with a database-generated id
+POST http://localhost:8080/api/events
+Content-Type: application/json
+
+{
+  "id": 777,
+  "title": "Id Test",
+  "location": "Room 1"
+}
